@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
-import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { Panel, Group, Separator } from "react-resizable-panels";
 import { Plus, FileCode, Eye, MessageSquare, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { ChatPanel } from "./ChatPanel";
@@ -97,16 +97,16 @@ export function ProjectEditor({ project, initialFiles }: { project: Project; ini
       </header>
       <div className="flex-1 overflow-hidden">
         {activeTab === "chat" ? (
-          <PanelGroup direction="horizontal">
-            <Panel defaultSize={35} minSize={25} maxSize={50}>
+          <Group orientation="horizontal">
+            <Panel defaultSize="35%" minSize="25%" maxSize="50%">
               <ChatPanel messages={chatMessages} onSend={sendMessage} isStreaming={isStreaming} />
             </Panel>
-            <PanelResizeHandle className="w-1 bg-[var(--border)] hover:bg-indigo-500/50 transition-colors" />
-            <Panel defaultSize={65}><Preview files={files} /></Panel>
-          </PanelGroup>
+            <Separator className="w-1 bg-[var(--border)] hover:bg-indigo-500/50 transition-colors" />
+            <Panel defaultSize="65%"><Preview files={files} /></Panel>
+          </Group>
         ) : activeTab === "editor" ? (
-          <PanelGroup direction="horizontal">
-            <Panel defaultSize={20} minSize={15} maxSize={30}>
+          <Group orientation="horizontal">
+            <Panel defaultSize="20%" minSize="15%" maxSize="30%">
               <div className="h-full flex flex-col bg-[var(--bg-secondary)] border-r border-[var(--border)]">
                 <div className="p-3 border-b border-[var(--border)] flex items-center justify-between">
                   <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Files</span>
@@ -125,7 +125,7 @@ export function ProjectEditor({ project, initialFiles }: { project: Project; ini
                 </div>
               </div>
             </Panel>
-            <PanelResizeHandle className="w-1 bg-[var(--border)] hover:bg-indigo-500/50 transition-colors" />
+            <Separator className="w-1 bg-[var(--border)] hover:bg-indigo-500/50 transition-colors" />
             <Panel>
               {activeFile ? (
                 <div className="h-full flex flex-col">
@@ -147,7 +147,7 @@ export function ProjectEditor({ project, initialFiles }: { project: Project; ini
                 </div>
               )}
             </Panel>
-          </PanelGroup>
+          </Group>
         ) : (
           <Preview files={files} />
         )}
