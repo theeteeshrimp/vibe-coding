@@ -1,65 +1,86 @@
-import Image from "next/image";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { projects } from "@/lib/db/schema";
+import { eq, desc } from "drizzle-orm";
+import Link from "next/link";
+import { signOut } from "@/lib/auth";
+import { Plus, Folder, LogOut } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { DeleteProjectButton } from "@/components/DeleteProjectButton";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+  if (!session?.user) redirect("/login");
+
+  const userId = (session.user as any).id;
+  const userProjects = await db.query.projects.findMany({
+    where: eq(projects.userId, userId),
+    orderBy: desc(projects.updatedAt),
+  });
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-[var(--bg-primary)]">
+      <header className="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">V</div>
+            <h1 className="text-xl font-semibold">Vibe Coding</h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-gray-400">{session.user.email}</span>
+            <form action={async () => { "use server"; await signOut({ redirectTo: "/login" }); }}>
+              <button type="submit" className="text-gray-400 hover:text-white transition-colors"><LogOut size={18} /></button>
+            </form>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-bold">Your Projects</h2>
+          <form action={createProject}>
+            <Button type="submit"><Plus size={16} className="mr-2" />New Project</Button>
+          </form>
         </div>
+        {userProjects.length === 0 ? (
+          <div className="text-center py-20">
+            <Folder size={48} className="mx-auto text-gray-600 mb-4" />
+            <p className="text-gray-400 mb-4">No projects yet. Create your first one!</p>
+            <form action={createProject}><Button type="submit"><Plus size={16} className="mr-2" />New Project</Button></form>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {userProjects.map((project) => (
+              <div key={project.id} className="group relative border border-[var(--border)] rounded-xl bg-[var(--bg-secondary)] hover:border-indigo-500/50 transition-all">
+                <Link href={`/project/${project.id}`} className="block p-5">
+                  <h3 className="font-semibold text-lg mb-1 group-hover:text-indigo-400 transition-colors">{project.name}</h3>
+                  {project.description && <p className="text-sm text-gray-400 mb-3">{project.description}</p>}
+                  <p className="text-xs text-gray-500">Updated {new Date(project.updatedAt).toLocaleDateString()}</p>
+                </Link>
+                <div className="absolute top-3 right-3"><DeleteProjectButton projectId={project.id} /></div>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
+}
+
+async function createProject() {
+  "use server";
+  const session = await auth();
+  if (!session?.user) redirect("/login");
+  const userId = (session.user as any).id;
+  const [project] = await db.insert(projects).values({ userId, name: "Untitled Project" }).returning();
+  const { db: database } = await import("@/lib/db");
+  const { files } = await import("@/lib/db/schema");
+  await database.insert(files).values([
+    { projectId: project.id, name: "index.html", path: "/index.html", language: "html",
+      content: '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Vibe Project</title>\n  <script src="https://cdn.tailwindcss.com"><\/script>\n</head>\n<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">\n  <div class="text-center">\n    <h1 class="text-4xl font-bold mb-4">Hello, Vibe! 🚀</h1>\n    <p class="text-gray-400">Start coding by chatting with the AI.</p>\n  </div>\n</body>\n</html>' },
+    { projectId: project.id, name: "App.tsx", path: "/App.tsx", language: "typescriptreact",
+      content: 'export default function App() {\n  return (\n    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">\n      <div className="text-center">\n        <h1 className="text-4xl font-bold mb-4">Hello, Vibe! 🚀</h1>\n        <p className="text-gray-400">Start coding by chatting with the AI.</p>\n      </div>\n    </div>\n  );\n}' },
+    { projectId: project.id, name: "styles.css", path: "/styles.css", language: "css", content: "/* Your styles here */" },
+  ]);
+  redirect(`/project/${project.id}`);
 }
