@@ -15,7 +15,7 @@ export function DeleteProjectButton({ projectId }: { projectId: string }) {
   };
   return (
     <button onClick={handleDelete} disabled={isPending}
-      className="p-1.5 rounded-md text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100">
+      className="p-2 rounded-[var(--radius-sm)] text-[var(--text-tertiary)] hover:text-[var(--error)] hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100">
       <Trash2 size={14} />
     </button>
   );
