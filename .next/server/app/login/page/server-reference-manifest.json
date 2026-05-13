@@ -1,0 +1,29 @@
+{
+  "node": {
+    "0025bd680667c8428e2f3e325b6903b23a7b799caf": {
+      "workers": {
+        "app/login/page": {
+          "moduleId": 22542,
+          "async": true,
+          "exportedName": "$$RSC_SERVER_ACTION_1",
+          "filename": "src/app/login/page.tsx"
+        }
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_1",
+      "filename": "src/app/login/page.tsx"
+    },
+    "40f05e960c8cfc07fda688464a8eb7743f15fc2e67": {
+      "workers": {
+        "app/login/page": {
+          "moduleId": 22542,
+          "async": true,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "src/app/login/page.tsx"
+        }
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "src/app/login/page.tsx"
+    }
+  },
+  "edge": {}
+}

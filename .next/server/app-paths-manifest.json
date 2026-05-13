@@ -1,0 +1,15 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/projects/[id]/chat/route": "app/api/projects/[id]/chat/route.js",
+  "/api/projects/[id]/files/[fileId]/route": "app/api/projects/[id]/files/[fileId]/route.js",
+  "/api/projects/[id]/files/route": "app/api/projects/[id]/files/route.js",
+  "/api/projects/[id]/route": "app/api/projects/[id]/route.js",
+  "/api/projects/route": "app/api/projects/route.js",
+  "/api/register/route": "app/api/register/route.js",
+  "/login/page": "app/login/page.js",
+  "/page": "app/page.js",
+  "/project/[id]/page": "app/project/[id]/page.js",
+  "/register/page": "app/register/page.js"
+}

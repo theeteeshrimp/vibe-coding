@@ -1,0 +1,29 @@
+{
+  "node": {
+    "00256911b54a1bc9770ca1603971e42cba3438b91c": {
+      "workers": {
+        "app/page": {
+          "moduleId": 20953,
+          "async": true,
+          "exportedName": "$$RSC_SERVER_ACTION_1",
+          "filename": "src/app/page.tsx"
+        }
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_1",
+      "filename": "src/app/page.tsx"
+    },
+    "003831f57a602794d0d5af07e76e489588ebb86e8a": {
+      "workers": {
+        "app/page": {
+          "moduleId": 20953,
+          "async": true,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "src/app/page.tsx"
+        }
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "src/app/page.tsx"
+    }
+  },
+  "edge": {}
+}

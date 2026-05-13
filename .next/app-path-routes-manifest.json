@@ -1,0 +1,15 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/auth/[...nextauth]/route": "/api/auth/[...nextauth]",
+  "/api/projects/[id]/chat/route": "/api/projects/[id]/chat",
+  "/api/projects/[id]/files/[fileId]/route": "/api/projects/[id]/files/[fileId]",
+  "/api/projects/[id]/files/route": "/api/projects/[id]/files",
+  "/api/projects/[id]/route": "/api/projects/[id]",
+  "/api/projects/route": "/api/projects",
+  "/api/register/route": "/api/register",
+  "/login/page": "/login",
+  "/page": "/",
+  "/project/[id]/page": "/project/[id]",
+  "/register/page": "/register"
+}
